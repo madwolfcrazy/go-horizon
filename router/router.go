@@ -9,13 +9,19 @@ import (
 	"github.com/spf13/viper"
 )
 
+//InitRouter 初始化路由
 func InitRouter() *gin.Engine {
 	r := gin.Default()
+	runMode := viper.GetString("runmode")
+	if runMode != "debug" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	//
 	//add some middleware
 	sessionSecret := viper.GetString("server.sessionsecret")
 	r.Use(middleware.Session(sessionSecret))
 	r.Use(middleware.MarkTraceID())
+	r.Use(middleware.Cors())
 	//
 	r.GET("/", api.Index)
 	r.GET("/ping", func(c *gin.Context) {

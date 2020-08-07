@@ -1,3 +1,4 @@
+runmode = "debug"
 [server]
 port = ":8083"
 sessionsecret = "bni67G%FG%f765d&^VB7r6Bnvjq"
