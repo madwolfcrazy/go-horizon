@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"syscall"
 	"ymz465/go-horizon/config"
 	"ymz465/go-horizon/model"
 	"ymz465/go-horizon/router"
 
+	"github.com/fvbock/endless"
 	"github.com/spf13/viper"
 )
 
@@ -21,6 +23,15 @@ func main() {
 	model.InitDatabase(mysqlDSN)
 	//
 	r := router.InitRouter()
-	fmt.Println("Now run service on: ", port)
-	r.Run(port)
+	//r.Run(port)
+	server := endless.NewServer(port, r)
+	server.BeforeBegin = func(add string) {
+		log.Printf("Now service runing on: %s, and pid is %d", port, syscall.Getpid())
+		// save pid if need
+	}
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Println(err)
+	}
+
 }
