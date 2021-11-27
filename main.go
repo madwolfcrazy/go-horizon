@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"syscall"
 	"ymz465/go-horizon/config"
 	"ymz465/go-horizon/model"
@@ -23,11 +25,16 @@ func main() {
 	model.InitDatabase(mysqlDSN)
 	//
 	r := router.InitRouter()
-	//r.Run(port)
 	server := endless.NewServer(port, r)
 	server.BeforeBegin = func(add string) {
-		log.Printf("Now service runing on: %s, and pid is %d", port, syscall.Getpid())
+		pid := syscall.Getpid()
+		log.Printf("Now service runing on: %s, and pid is %d", port, pid)
 		// save pid if need
+		pidFile, err := os.Create("./logs/run.pid")
+		if err == nil {
+			pidFile.WriteString(fmt.Sprint(pid))
+			pidFile.Close()
+		}
 	}
 	err := server.ListenAndServe()
 	if err != nil {
