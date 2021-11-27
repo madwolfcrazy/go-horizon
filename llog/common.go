@@ -9,7 +9,7 @@ import (
 )
 
 var accessLogDir string = "./logs"
-var logFileHandle *os.File
+var logger *log.Logger
 
 func init() {
 	if !helper.CheckFileExists(accessLogDir) {
@@ -19,7 +19,10 @@ func init() {
 			log.Fatal("Can't create ./logs dir, please check file system right")
 		}
 	}
-	logFilePath := fmt.Sprintf("%s/run.log", accessLogDir)
+}
+
+//GetLoggerFile get log file
+func GetLoggerFile(logFilePath string) (*os.File, error) {
 	if helper.CheckFileExists(logFilePath) {
 		//exists file, judge does file need rename by file size
 		fInfo, err := os.Stat(logFilePath)
@@ -28,14 +31,13 @@ func init() {
 		}
 		if fInfo.Size() < 1024*1024*1000 {
 			// less than 1G then append model open file
-			logFileHandle, _ = os.OpenFile(accessLogDir, os.O_APPEND|os.O_WRONLY, 0600)
-			return
+			return os.OpenFile(logFilePath, os.O_APPEND|os.O_WRONLY, 0600)
 		}
 		// more than 1G then rename exists file
 		newName := fmt.Sprintf("%s/d15_%s.log", accessLogDir, time.Now().Format("2006-01-02"))
 		os.Rename(logFilePath, newName)
 	}
-	logFileHandle, _ = os.Create(logFilePath)
+	return os.Create(logFilePath)
 }
 
 //GetAccessLogFile create new access log file
@@ -60,7 +62,17 @@ func GetAccessLogFile() (*os.File, error) {
 	return os.Create(logPath)
 }
 
+//Print 记录日志记录
+func Print(v ...interface{}) {
+	logger.Println(v...)
+}
+
 //Println 记录日志记录
 func Println(v ...interface{}) {
-	logFileHandle.WriteString(fmt.Sprintln(v...))
+	logger.Println(v...)
+}
+
+//Printf 记录日志记录
+func Printf(format string, v ...interface{}) {
+	logger.Printf(format, v...)
 }
