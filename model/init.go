@@ -30,9 +30,7 @@ func InitDatabase(connString string) {
 	sqlDB.SetMaxOpenConns(100)
 	//超时
 	sqlDB.SetConnMaxLifetime(time.Minute * 30)
-	// 设置自动建立表时的字符集
-	db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4 auto_increment=1")
 	DB = db
-
-	DB.AutoMigrate(&User{})
+	// 设置自动建立表时的字符集
+	DB.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4").AutoMigrate(&User{})
 }
