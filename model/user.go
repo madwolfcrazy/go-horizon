@@ -1,6 +1,12 @@
 package model
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"time"
+
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
+)
+
 
 const (
 	passWordCost = 12
@@ -8,9 +14,11 @@ const (
 
 //User 用户表
 type User struct {
-	UID      uint   `gorm:"column:uid;primary_key;auto_increment:true"`
-	UserName string `gorm:"column:username"`
-	Password string
+	gorm.Model
+	UserName   string `gorm:"column:username;type:char(255);index" json:"username"`
+	Password   string `gorm:"column:password;type:char(255)" json:"password"`
+	Group      string `gorm:"column:group;type:char(32)" json:"group"`
+	ExpireTime int    `gorm:"column:expire_time;type:int(16)" json:"expire_time"`
 }
 
 func (User) TableName() string {
@@ -51,3 +59,24 @@ func GetUser(uid uint) (existUser *User, err error) {
 	}
 	return
 }
+
+type LoginedUserInfo struct {
+	UID        uint      `json:"uid"`
+	Username   string    `json:"username"`
+	CreateAt   time.Time `json:"create_at"`
+	Group      string    `json:"group"`
+	ExpireTime int       `gorm:"column:expire_time" json:"expire_time"`
+}
+
+//ToLoginedUserInfo User Model 转换为 用户登录后信息
+func (u *User) ToLoginedUserInfo() *LoginedUserInfo {
+	l := LoginedUserInfo{
+		UID:        u.ID,
+		Username:   u.UserName,
+		CreateAt:   u.CreatedAt,
+		Group:      u.Group,
+		ExpireTime: u.ExpireTime,
+	}
+	return &l
+}
+
