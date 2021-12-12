@@ -10,21 +10,24 @@ import (
 	"ymz465/go-horizon/model"
 	"ymz465/go-horizon/router"
 
-	"github.com/fvbock/endless"
+	"github.com/madwolfcrazy/endless"
 	"github.com/spf13/viper"
 )
 
 func main() {
-	//
-	logFile, err := llog.GetLoggerFile("./logs/run.log")
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
+	config.Init()
+	var err error
+	if viper.GetString("runmode") != "debug" {
+		//
+		logFile, err := llog.GetLoggerFile("./logs/run.log")
+		if err != nil {
+			log.Fatalf("error opening file: %v", err)
+		}
+		defer logFile.Close()
+		log.SetOutput(logFile)
 	}
-	defer logFile.Close()
-	log.SetOutput(logFile)
 	//
 	defaultPort := ":8080"
-	config.Init()
 	port := viper.GetString("server.port")
 	if port == "" {
 		port = defaultPort
