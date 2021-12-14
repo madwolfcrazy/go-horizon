@@ -3,6 +3,8 @@ package helper
 import (
 	"math/rand"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -36,4 +38,15 @@ func CheckFileExists(path string) bool {
 		return false
 	}
 	return true
+}
+
+//GetCurrentExeDir 获取当前程序目录
+func GetExeDir() (string, error) {
+	//获取当前程序目录
+	exeDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return "", err
+	}
+	ExeDir := strings.Replace(exeDir, "\\", "/", -1)
+	return ExeDir, nil
 }

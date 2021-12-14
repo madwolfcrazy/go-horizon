@@ -19,7 +19,7 @@ func main() {
 	var err error
 	if viper.GetString("runmode") != "debug" {
 		//
-		logFile, err := llog.GetLoggerFile("./logs/run.log")
+		logFile, err := llog.GetLoggerFile(config.RunLog)
 		if err != nil {
 			log.Fatalf("error opening file: %v", err)
 		}
@@ -42,7 +42,7 @@ func main() {
 		pid := syscall.Getpid()
 		log.Printf("Now service runing on: %s, and pid is %d", port, pid)
 		// save pid if need
-		pidFile, err := os.Create("./logs/run.pid")
+		pidFile, err := os.Create(config.PIDFile)
 		if err == nil {
 			pidFile.WriteString(fmt.Sprint(pid))
 			pidFile.Close()

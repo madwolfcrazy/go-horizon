@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
+	"ymz465/go-horizon/config"
 	"ymz465/go-horizon/helper"
 )
 
-var accessLogDir string = "./logs"
 var logger *log.Logger
 
-func init() {
-	if !helper.CheckFileExists(accessLogDir) {
+func Init() {
+	if !helper.CheckFileExists(config.LogDir) {
 		// 日志目录不存在新建
-		err := os.MkdirAll(accessLogDir, os.ModePerm)
+		err := os.MkdirAll(config.LogDir, os.ModePerm)
 		if err != nil {
-			log.Fatal("Can't create ./logs dir, please check file system right")
+			log.Fatal("Can't create " + config.LogDir + " dir, please check file system right")
 		}
 	}
 }
@@ -33,6 +34,7 @@ func GetLoggerFile(logFilePath string) (*os.File, error) {
 			// less than 1G then append model open file
 			return os.OpenFile(logFilePath, os.O_APPEND|os.O_WRONLY, 0600)
 		}
+		accessLogDir := filepath.Dir(logFilePath)
 		// more than 1G then rename exists file
 		newName := fmt.Sprintf("%s/d15_%s.log", accessLogDir, time.Now().Format("2006-01-02"))
 		os.Rename(logFilePath, newName)
@@ -44,7 +46,7 @@ func GetLoggerFile(logFilePath string) (*os.File, error) {
 func GetAccessLogFile() (*os.File, error) {
 	// Logging to a file.
 	today := time.Now().Format("2006-01-02")
-	logPath := fmt.Sprintf("%s/access.log", accessLogDir)
+	logPath := filepath.Join(config.LogDir, "access.log")
 	if helper.CheckFileExists(logPath) {
 		//exists file, judge does file need rename by file size
 		fInfo, err := os.Stat(logPath)
@@ -56,7 +58,7 @@ func GetAccessLogFile() (*os.File, error) {
 			return os.OpenFile(logPath, os.O_APPEND|os.O_WRONLY, 0600)
 		}
 		// more than 1G then rename exists file
-		newName := fmt.Sprintf("%s/access_%s_%s.log", accessLogDir, today, helper.RandString(8))
+		newName := fmt.Sprintf("%s/access_%s_%s.log", config.LogDir, today, helper.RandString(8))
 		os.Rename(logPath, newName)
 	}
 	return os.Create(logPath)
