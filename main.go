@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"syscall"
 	"ymz465/go-horizon/config"
 	"ymz465/go-horizon/llog"
@@ -16,6 +17,20 @@ import (
 
 func main() {
 	config.Init()
+	// is exit flag
+	if len(os.Args) > 1 && os.Args[1] == "stop" {
+		// kill pid
+		cmdStr := fmt.Sprintf("kill -EXIT `cat %s`", config.PIDFile)
+		exec.Command(cmdStr)
+		os.Exit(0)
+	}
+	// is restart flag
+	if len(os.Args) > 1 && os.Args[1] == "restart" {
+		// send HUP singal
+		cmdStr := fmt.Sprintf("kill -HUP `cat %s`", config.PIDFile)
+		exec.Command(cmdStr)
+		os.Exit(0)
+	}
 	var err error
 	if viper.GetString("runmode") != "debug" {
 		//
