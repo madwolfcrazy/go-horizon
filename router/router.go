@@ -1,11 +1,8 @@
 package router
 
 import (
-	"io"
-	"log"
 	"net/http"
 	"ymz465/go-horizon/api"
-	"ymz465/go-horizon/llog"
 	"ymz465/go-horizon/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -14,17 +11,6 @@ import (
 
 //InitRouter 初始化路由
 func InitRouter() *gin.Engine {
-	runMode := viper.GetString("runmode")
-	if runMode != "debug" {
-		gin.DisableConsoleColor()
-		gin.SetMode(gin.ReleaseMode)
-		// set log file
-		accessLogFile, err := llog.GetAccessLogFile()
-		if err != nil {
-			log.Fatal("Create log file error: ", err)
-		}
-		gin.DefaultWriter = io.MultiWriter(accessLogFile)
-	}
 	r := gin.Default()
 	//add some middleware
 	sessionSecret := viper.GetString("server.sessionsecret")

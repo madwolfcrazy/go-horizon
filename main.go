@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"syscall"
 	"ymz465/go-horizon/config"
-	"ymz465/go-horizon/llog"
 	"ymz465/go-horizon/model"
 	"ymz465/go-horizon/router"
 
@@ -32,15 +31,6 @@ func main() {
 		os.Exit(0)
 	}
 	var err error
-	if viper.GetString("runmode") != "debug" {
-		//
-		logFile, err := llog.GetLoggerFile(config.RunLog)
-		if err != nil {
-			log.Fatalf("error opening file: %v", err)
-		}
-		defer logFile.Close()
-		log.SetOutput(logFile)
-	}
 	//
 	defaultPort := ":8080"
 	port := viper.GetString("server.port")
