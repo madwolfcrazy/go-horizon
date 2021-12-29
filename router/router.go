@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 	"ymz465/go-horizon/api"
+	"ymz465/go-horizon/config"
 	"ymz465/go-horizon/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,7 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.Cors())
 	//
 	r.GET("/", api.Index)
+	r.Static("/html/", config.HTMLDir)
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})

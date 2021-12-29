@@ -14,12 +14,14 @@ import (
 )
 
 var (
-	ExeDir    string
-	LogDir    string
-	AccessLog string
-	RunLog    string
-	HTMLDir   string
-	PIDFile   string
+	ExeDir        string
+	LogDir        string
+	AccessLog     string
+	RunLog        string
+	HTMLDir       string
+	PIDFile       string
+	TLSPublicKey  string
+	TLSPrivateKey string
 )
 
 //Init 初始化
@@ -40,6 +42,8 @@ func Init() {
 	RunLog = filepath.Join(LogDir, "run.log")
 	PIDFile = filepath.Join(LogDir, "run.pid")
 	HTMLDir = filepath.Join(ExeDir, "html")
+	TLSPublicKey = filepath.Join(ExeDir, "certs", "server.pem")
+	TLSPrivateKey = filepath.Join(ExeDir, "certs", "server.key")
 	//
 	if !helper.CheckFileExists(LogDir) {
 		// log dir not exists, create it

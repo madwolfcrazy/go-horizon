@@ -56,6 +56,12 @@ func main() {
 	log.Println("start go-horizon")
 	log.Printf("%s - %d ", "start go-horizon", 1978)
 	err = server.ListenAndServe()
+	/*
+		generater tls key pair
+		# openssl genrsa -out ./server.key 2048
+		# openssl req -new -x509 -key ./server.key -out ./server.pem -days 365
+	*/
+	//err = server.ListenAndServeTLS(config.TLSPublicKey, config.TLSPrivateKey)
 	if err != nil {
 		log.Println(err)
 	}
