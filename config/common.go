@@ -58,7 +58,6 @@ func Init() {
 		if err != nil {
 			log.Fatalf("error opening file: %v", err)
 		}
-		defer logFile.Close()
 		log.SetOutput(logFile)
 		// set gin access log
 		gin.DisableConsoleColor()
