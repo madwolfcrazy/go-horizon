@@ -18,9 +18,10 @@ func MakeJwtAuthMiddleware() (*jwt.GinJWTMiddleware, error) {
 		Realm: "hostlaskdflakjdf",
 		Key:   []byte("secret key %78&f75r.!"),
 		// 过期时间
-		Timeout:     time.Hour * 24 * 3,
-		MaxRefresh:  time.Hour * 23 * 20,
+		Timeout:     time.Hour * 12,
+		MaxRefresh:  time.Hour * 11,
 		IdentityKey: identityKey,
+		SendCookie:  true,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*model.LoginedUserInfo); ok {
 				return jwt.MapClaims{
@@ -58,7 +59,6 @@ func MakeJwtAuthMiddleware() (*jwt.GinJWTMiddleware, error) {
 			if code == 200 {
 				code = 0
 			}
-			c.SetCookie("jwt", token, 86400, "/", "*", false, true)
 			c.JSON(200, gin.H{
 				"code": code,
 				"data": gin.H{

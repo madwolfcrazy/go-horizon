@@ -39,6 +39,7 @@ func InitRouter() *gin.Engine {
 	authed.Use(jwtObject.MiddlewareFunc())
 
 	{
+		authed.GET("/refresh_token", jwtObject.RefreshHandler)
 		//
 		authed.POST("chpwd", api.Chpwd)
 	}
