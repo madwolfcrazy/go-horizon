@@ -32,6 +32,11 @@ func Init() {
 		os.Exit(0)
 	}
 	viper.SetConfigName("config")
+	// for my dev
+	ymzDEV := os.Getenv("YMZ_DEV")
+	if ymzDEV != "" {
+		ExeDir = "."
+	}
 	viper.AddConfigPath(ExeDir)
 	if err := viper.ReadInConfig(); err != nil {
 		log.Println("加载config.toml文件错误，请检查")

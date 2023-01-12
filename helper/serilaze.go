@@ -17,6 +17,7 @@ func Serialization(o1 interface{}) []byte {
 }
 
 //Unserialization 反序列化
-func Unserialization(b1 []byte, o1 interface{}) error {
-	return nil
+func Unserialization(b1 []byte, dest interface{}) error {
+	decoder := gob.NewDecoder(bytes.NewReader(b1))
+	return decoder.Decode(dest)
 }
