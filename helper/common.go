@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyz" +
@@ -101,4 +103,10 @@ func Trim(s1 string) string {
 	s1 = strings.Trim(s1, "\t")
 	s1 = strings.Trim(s1, "\n")
 	return s1
+}
+
+//UUID4 生成UUID4
+func UUID4() string {
+	u := uuid.New()
+	return u.String()
 }
