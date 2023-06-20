@@ -74,7 +74,7 @@ func MakeJwtAuthMiddleware() (*jwt.GinJWTMiddleware, error) {
 			return true
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
-			c.JSON(200, serializer.ErrorResponse(errors.New("权限验证失败")))
+			c.JSON(200, serializer.ErrorAuthResponse(errors.New("权限验证失败")))
 		},
 		// TokenLookup is a string in the form of "<source>:<name>" that is used
 		// to extract token from the request.

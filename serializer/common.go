@@ -19,6 +19,15 @@ func ErrorResponse(err interface{}) Response {
 	}
 }
 
+//ErrorAuthResponse 登录验证错误
+func ErrorAuthResponse(err interface{}) Response {
+	return Response{
+		Code:  403,
+		Msg:   "错误",
+		Error: fmt.Sprint(err),
+	}
+}
+
 //Common 普通输出
 func Common(v interface{}) Response {
 	return Response{
