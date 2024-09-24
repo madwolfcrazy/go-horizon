@@ -26,7 +26,8 @@ var (
 
 //Init 初始化
 func Init() {
-	ExeDir, err := helper.GetExeDir()
+        var err error
+	ExeDir, err = helper.GetExeDir()
 	if err != nil {
 		log.Println("获取当前程序运行目录错误: ", err)
 		os.Exit(0)
