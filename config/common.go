@@ -24,9 +24,9 @@ var (
 	TLSPrivateKey string
 )
 
-//Init 初始化
+// Init 初始化
 func Init() {
-        var err error
+	var err error
 	ExeDir, err = helper.GetExeDir()
 	if err != nil {
 		log.Println("获取当前程序运行目录错误: ", err)
@@ -77,7 +77,7 @@ func Init() {
 	}
 }
 
-//getLoggerFile get log file
+// getLoggerFile get log file
 func getLoggerFile(logFilePath string) (*os.File, error) {
 	if helper.CheckFileExists(logFilePath) {
 		//exists file, judge does file need rename by file size
@@ -91,13 +91,13 @@ func getLoggerFile(logFilePath string) (*os.File, error) {
 		}
 		accessLogDir := filepath.Dir(logFilePath)
 		// more than 1G then rename exists file
-		newName := fmt.Sprintf("%s/d15_%s.log", accessLogDir, time.Now().Format("2006-01-02"))
+		newName := fmt.Sprintf("%s/run_%s.log", accessLogDir, time.Now().Format("2006-01-02"))
 		os.Rename(logFilePath, newName)
 	}
 	return os.Create(logFilePath)
 }
 
-//getAccessLogFile create new access log file
+// getAccessLogFile create new access log file
 func getAccessLogFile() (*os.File, error) {
 	// Logging to a file.
 	today := time.Now().Format("2006-01-02")
